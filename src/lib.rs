@@ -27,12 +27,10 @@ macro_rules! float {
 #[cfg(feature = "serde")]
 mod serde_impl;
 
-mod lab_util;
-mod util;
-mod vec3;
+mod color;
 
 pub type Float = float!();
-pub use vec3::Color;
+pub use color::Color;
 
 pub mod illuminate;
 pub mod spaces;

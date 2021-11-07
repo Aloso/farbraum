@@ -1,5 +1,5 @@
 use crate::spaces::Srgb;
-use crate::{Float, From, Color};
+use crate::{Color, Float, From};
 
 use super::CubeHelix;
 
@@ -43,7 +43,7 @@ impl From<Srgb> for Color<CubeHelix> {
             (x * x + y * y).sqrt() / (M[4] * l * (1.0 - l))
         };
 
-        let h = if s != 0.0 {
+        let h = if s != 0.0 && !s.is_nan() {
             y.atan2(x) * RAD_TO_DEG - 120.0
         } else {
             0.0

@@ -1,5 +1,5 @@
-use crate::spaces::{Hsi, Srgb};
-use crate::{util, From, Color};
+use crate::spaces::{util, Hsi, Srgb};
+use crate::{Color, From};
 
 impl From<Hsi> for Color<Srgb> {
     fn from(hsi: Color<Hsi>) -> Self {

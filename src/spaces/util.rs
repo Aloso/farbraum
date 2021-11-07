@@ -1,7 +1,17 @@
 use crate::Float;
 
+const PI: Float = float!(PI);
+
 pub(crate) fn normalize_hue(hue: Float) -> Float {
     hue.rem_euclid(360.0)
+}
+
+pub(crate) fn rad_to_deg(rad: Float) -> Float {
+    (rad * 180.0) / PI
+}
+
+pub(crate) fn deg_to_rad(rad: Float) -> Float {
+    (rad / 180.0) * PI
 }
 
 pub(crate) fn min_max(r: Float, g: Float, b: Float) -> (Float, Float) {
@@ -20,5 +30,16 @@ pub(crate) fn calculate_hsl_hue(r: Float, g: Float, b: Float, max: Float, min: F
         }) * 60.0
     } else {
         0.0
+    }
+}
+
+pub(crate) fn cos_and_sin_radians(factor: Float, hue: Float) -> (Float, Float) {
+    if factor != 0.0 && !factor.is_nan() {
+        (
+            factor * deg_to_rad(hue).cos(),
+            factor * deg_to_rad(hue).sin(),
+        )
+    } else {
+        (0.0, 0.0)
     }
 }

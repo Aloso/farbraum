@@ -47,26 +47,32 @@ impl<S> Color<S> {
         From::from(self)
     }
 
+    /// Borrow first component
     pub fn ref_0(&self) -> &Float {
         &self.0
     }
 
+    /// Borrow second component
     pub fn ref_1(&self) -> &Float {
         &self.1
     }
 
+    /// Borrow third component
     pub fn ref_2(&self) -> &Float {
         &self.2
     }
 
+    /// Mutably borrow first component
     pub fn mut_0(&mut self) -> &mut Float {
         &mut self.0
     }
 
+    /// Mutably borrow second component
     pub fn mut_1(&mut self) -> &mut Float {
         &mut self.1
     }
 
+    /// Mutably borrow third component
     pub fn mut_2(&mut self) -> &mut Float {
         &mut self.2
     }

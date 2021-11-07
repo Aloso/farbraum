@@ -7,6 +7,8 @@ mod adobe98;
 mod cielab_d50;
 mod cielab_d65;
 mod cielch;
+mod cielchuv;
+mod cieluv;
 mod cubehelix;
 mod dlab;
 mod dlch;
@@ -16,9 +18,12 @@ mod hsv;
 mod hwb;
 mod jab;
 mod jch;
+mod lab;
 mod lrgb;
 mod xyz_d50;
 mod xyz_d65;
+
+mod util;
 
 pub trait Lab {
     type Lch;
@@ -74,6 +79,14 @@ impl<I: fmt::Debug + Default> fmt::Debug for CieXyz<I> {
     }
 }
 
+/// Cie LCh color space.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub struct CieLuv;
+
+/// Cie LChuv color space.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub struct CieLchuv;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct CubeHelix;
 
@@ -89,6 +102,14 @@ impl Lab for DLab {
     type Lch = DLch;
     type Illuminate = D65;
 }
+
+/// Jab color space.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub struct Jab;
+
+/// Jch color space.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub struct Jch;
 
 /// HSI color space.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
