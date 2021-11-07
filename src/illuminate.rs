@@ -1,10 +1,10 @@
 use crate::Float;
 
-/// Whitepoint D50. Commonly used by CIE color spaces.
+/// Standard D50 illuminate. Commonly used by CIE color spaces.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct D50;
 
-/// Whitepoint D65. Used by sRGB and many other color spaces.
+/// Standard D65 illuminate. Used by sRGB and many other color spaces.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct D65;
 

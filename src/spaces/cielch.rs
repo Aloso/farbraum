@@ -1,14 +1,14 @@
 use crate::spaces::{CieLab, CieLch};
-use crate::{lab_util, From, Color};
+use crate::{lab_util, Color, From};
 
-impl<WHITE> From<CieLch<WHITE>> for Color<CieLab<WHITE>> {
-    fn from(lch: Color<CieLch<WHITE>>) -> Self {
+impl<I> From<CieLch<I>> for Color<CieLab<I>> {
+    fn from(lch: Color<CieLch<I>>) -> Self {
         lab_util::lch_to_lab(lch)
     }
 }
 
-impl<WHITE> From<CieLab<WHITE>> for Color<CieLch<WHITE>> {
-    fn from(lab: Color<CieLab<WHITE>>) -> Self {
+impl<I> From<CieLab<I>> for Color<CieLch<I>> {
+    fn from(lab: Color<CieLab<I>>) -> Self {
         lab_util::lab_to_lch(lab)
     }
 }

@@ -1,5 +1,5 @@
 use crate::spaces::{CieLab, DLch};
-use crate::whites::D65;
+use crate::illuminate::D65;
 use crate::{util, Float, From, Color};
 
 const PI: Float = float!(PI);

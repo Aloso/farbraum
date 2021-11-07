@@ -34,8 +34,8 @@ mod vec3;
 pub type Float = float!();
 pub use vec3::Color;
 
+pub mod illuminate;
 pub mod spaces;
-pub mod whites;
 
 pub trait From<SPACE> {
     fn from(xyz: Color<SPACE>) -> Self;

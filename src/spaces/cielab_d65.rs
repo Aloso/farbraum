@@ -1,6 +1,6 @@
+use crate::illuminate::{D65, D65_WHITE as WHITE};
 use crate::spaces::{CieLab, CieXyz, Srgb};
-use crate::whites::{D65, D65_WHITE as WHITE};
-use crate::{From, Color};
+use crate::{Color, From};
 
 impl From<CieLab<D65>> for Color<CieXyz<D65>> {
     fn from(lab: Color<CieLab<D65>>) -> Self {

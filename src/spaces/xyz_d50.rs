@@ -1,5 +1,5 @@
 use crate::spaces::{CieXyz, LinearSrgb, Srgb};
-use crate::whites::D50;
+use crate::illuminate::D50;
 use crate::{Color, Float, From};
 
 pub(crate) const K: Float = (29.0 * 29.0 * 29.0) / (3.0 * 3.0 * 3.0);

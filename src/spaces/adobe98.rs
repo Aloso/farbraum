@@ -1,6 +1,6 @@
+use crate::illuminate::D65;
 use crate::spaces::{Adobe98, CieXyz, Srgb};
-use crate::whites::D65;
-use crate::{Float, From, Color};
+use crate::{Color, Float, From};
 
 fn linearize(v: Float) -> Float {
     v.abs().powf(563.0 / 256.0) * v.signum()

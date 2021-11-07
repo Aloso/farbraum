@@ -1,5 +1,5 @@
 use crate::spaces::{CieXyz, LinearSrgb, Srgb};
-use crate::whites::{D50, D65};
+use crate::illuminate::{D50, D65};
 use crate::{Color, From};
 
 impl From<CieXyz<D50>> for Color<CieXyz<D65>> {

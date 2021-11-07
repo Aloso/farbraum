@@ -1,7 +1,7 @@
 use core::fmt;
 use std::marker::PhantomData;
 
-use crate::whites::D65;
+use crate::illuminate::D65;
 
 mod adobe98;
 mod cielab_d50;
@@ -22,7 +22,7 @@ mod xyz_d65;
 
 pub trait Lab {
     type Lch;
-    type White;
+    type Illuminate;
 }
 
 /// Adobe RGB color space from 1998.
@@ -35,42 +35,42 @@ pub struct Srgb;
 
 /// CIE Lab color space.
 #[derive(Clone, Copy, PartialEq, Eq, Default)]
-pub struct CieLab<WHITE> {
-    wp: PhantomData<WHITE>,
+pub struct CieLab<I> {
+    wp: PhantomData<I>,
 }
 
-impl<WHITE: fmt::Debug + Default> fmt::Debug for CieLab<WHITE> {
+impl<I: fmt::Debug + Default> fmt::Debug for CieLab<I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CieLab-{:?}", WHITE::default())
+        write!(f, "CieLab-{:?}", I::default())
     }
 }
 
 /// CIE LCh color space.
 #[derive(Clone, Copy, PartialEq, Eq, Default)]
-pub struct CieLch<WHITE> {
-    wp: PhantomData<WHITE>,
+pub struct CieLch<I> {
+    wp: PhantomData<I>,
 }
 
-impl<WHITE: fmt::Debug + Default> fmt::Debug for CieLch<WHITE> {
+impl<I: fmt::Debug + Default> fmt::Debug for CieLch<I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CieLch-{:?}", WHITE::default())
+        write!(f, "CieLch-{:?}", I::default())
     }
 }
 
-impl<WHITE> Lab for CieLab<WHITE> {
-    type Lch = CieLch<WHITE>;
-    type White = WHITE;
+impl<I> Lab for CieLab<I> {
+    type Lch = CieLch<I>;
+    type Illuminate = I;
 }
 
 /// CIE XYZ color space.
 #[derive(Clone, Copy, PartialEq, Eq, Default)]
-pub struct CieXyz<WHITE> {
-    wp: PhantomData<WHITE>,
+pub struct CieXyz<I> {
+    illuminate: PhantomData<I>,
 }
 
-impl<WHITE: fmt::Debug + Default> fmt::Debug for CieXyz<WHITE> {
+impl<I: fmt::Debug + Default> fmt::Debug for CieXyz<I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CieXyz-{:?}", WHITE::default())
+        write!(f, "CieXyz-{:?}", I::default())
     }
 }
 
@@ -87,7 +87,7 @@ pub struct DLch;
 
 impl Lab for DLab {
     type Lch = DLch;
-    type White = D65;
+    type Illuminate = D65;
 }
 
 /// HSI color space.
