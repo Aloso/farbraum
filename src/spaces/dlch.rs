@@ -1,6 +1,6 @@
 use crate::spaces::{CieLab, DLch};
 use crate::whites::D65;
-use crate::{util, Float, From, Vec3};
+use crate::{util, Float, From, Color};
 
 const PI: Float = float!(PI);
 const E: Float = float!(E);
@@ -12,8 +12,8 @@ fn factor() -> Float {
     100.0 / (float!(139.0) / 100.0).log(E) // ~ 303.67
 }
 
-impl From<DLch> for Vec3<CieLab, D65> {
-    fn from(lch: Vec3<DLch>) -> Self {
+impl From<DLch> for Color<CieLab<D65>> {
+    fn from(lch: Color<DLch>) -> Self {
         let (l, c, h) = lch.tuple();
 
         let cos_delta = DELTA.cos();
@@ -28,12 +28,12 @@ impl From<DLch> for Vec3<CieLab, D65> {
         let a = e * cos_delta - (f / 0.83) * sin_delta;
         let b = e * sin_delta + (f / 0.83) * cos_delta;
 
-        Vec3::new(l2, a, b)
+        Color::new(l2, a, b)
     }
 }
 
-impl From<CieLab, D65> for Vec3<DLch> {
-    fn from(lab: Vec3<CieLab, D65>) -> Self {
+impl From<CieLab<D65>> for Color<DLch> {
+    fn from(lab: Color<CieLab<D65>>) -> Self {
         let (l, a, b) = lab.tuple();
 
         let cos_delta = DELTA.cos();
@@ -50,6 +50,6 @@ impl From<CieLab, D65> for Vec3<DLch> {
         } else {
             0.0
         };
-        Vec3::new(l2, c, h)
+        Color::new(l2, c, h)
     }
 }

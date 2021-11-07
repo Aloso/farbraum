@@ -1,14 +1,14 @@
 use crate::spaces::{DLab, DLch};
-use crate::{lab_util, From, Vec3};
+use crate::{lab_util, From, Color};
 
-impl<WHITE> From<DLch, WHITE> for Vec3<DLab, WHITE> {
-    fn from(lch: Vec3<DLch, WHITE>) -> Self {
+impl From<DLch> for Color<DLab> {
+    fn from(lch: Color<DLch>) -> Self {
         lab_util::lch_to_lab(lch)
     }
 }
 
-impl<WHITE> From<DLab, WHITE> for Vec3<DLch, WHITE> {
-    fn from(lab: Vec3<DLab, WHITE>) -> Self {
+impl From<DLab> for Color<DLch> {
+    fn from(lab: Color<DLab>) -> Self {
         lab_util::lab_to_lch(lab)
     }
 }

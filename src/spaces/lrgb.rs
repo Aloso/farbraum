@@ -1,5 +1,5 @@
 use crate::spaces::{LinearSrgb, Srgb};
-use crate::{Float, From, Vec3};
+use crate::{Float, From, Color};
 
 fn positive_signum(n: Float) -> Float {
     if n >= 0.0 {
@@ -18,10 +18,10 @@ fn f1(c: Float) -> Float {
     }
 }
 
-impl From<LinearSrgb> for Vec3<Srgb> {
-    fn from(rgb: Vec3<LinearSrgb>) -> Self {
+impl From<LinearSrgb> for Color<Srgb> {
+    fn from(rgb: Color<LinearSrgb>) -> Self {
         let (r, g, b) = rgb.tuple();
-        Vec3::new(f1(r), f1(g), f1(b))
+        Color::new(f1(r), f1(g), f1(b))
     }
 }
 
@@ -34,9 +34,9 @@ fn f2(c: Float) -> Float {
     }
 }
 
-impl From<Srgb> for Vec3<LinearSrgb> {
-    fn from(rgb: Vec3<Srgb>) -> Self {
+impl From<Srgb> for Color<LinearSrgb> {
+    fn from(rgb: Color<Srgb>) -> Self {
         let (r, g, b) = rgb.tuple();
-        Vec3::new(f2(r), f2(g), f2(b))
+        Color::new(f2(r), f2(g), f2(b))
     }
 }

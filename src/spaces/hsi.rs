@@ -1,50 +1,50 @@
 use crate::spaces::{Hsi, Srgb};
-use crate::{util, From, Vec3};
+use crate::{util, From, Color};
 
-impl From<Hsi> for Vec3<Srgb> {
-    fn from(hsi: Vec3<Hsi>) -> Self {
+impl From<Hsi> for Color<Srgb> {
+    fn from(hsi: Color<Hsi>) -> Self {
         let (h, s, i) = hsi.tuple();
         let h = util::normalize_hue(h);
         let f = (((h / 60.0) % 2.0) - 1.0).abs();
 
         match (h / 60.0).floor() as i32 {
-            0 => Vec3::new(
+            0 => Color::new(
                 i * (1.0 + s * (3.0 / (2.0 - f) - 1.0)),
                 i * (1.0 + s * ((3.0 * (1.0 - f)) / (2.0 - f) - 1.0)),
                 i * (1.0 - s),
             ),
-            1 => Vec3::new(
+            1 => Color::new(
                 i * (1.0 + s * ((3.0 * (1.0 - f)) / (2.0 - f) - 1.0)),
                 i * (1.0 + s * (3.0 / (2.0 - f) - 1.0)),
                 i * (1.0 - s),
             ),
-            2 => Vec3::new(
+            2 => Color::new(
                 i * (1.0 - s),
                 i * (1.0 + s * (3.0 / (2.0 - f) - 1.0)),
                 i * (1.0 + s * ((3.0 * (1.0 - f)) / (2.0 - f) - 1.0)),
             ),
-            3 => Vec3::new(
+            3 => Color::new(
                 i * (1.0 - s),
                 i * (1.0 + s * ((3.0 * (1.0 - f)) / (2.0 - f) - 1.0)),
                 i * (1.0 + s * (3.0 / (2.0 - f) - 1.0)),
             ),
-            4 => Vec3::new(
+            4 => Color::new(
                 i * (1.0 + s * ((3.0 * (1.0 - f)) / (2.0 - f) - 1.0)),
                 i * (1.0 - s),
                 i * (1.0 + s * (3.0 / (2.0 - f) - 1.0)),
             ),
-            5 => Vec3::new(
+            5 => Color::new(
                 i * (1.0 + s * (3.0 / (2.0 - f) - 1.0)),
                 i * (1.0 - s),
                 i * (1.0 + s * ((3.0 * (1.0 - f)) / (2.0 - f) - 1.0)),
             ),
-            _ => Vec3::new(i * (1.0 - s), i * (1.0 - s), i * (1.0 - s)),
+            _ => Color::new(i * (1.0 - s), i * (1.0 - s), i * (1.0 - s)),
         }
     }
 }
 
-impl From<Srgb> for Vec3<Hsi> {
-    fn from(rgb: Vec3<Srgb>) -> Self {
+impl From<Srgb> for Color<Hsi> {
+    fn from(rgb: Color<Srgb>) -> Self {
         let (r, g, b) = rgb.tuple();
 
         let (min, max) = util::min_max(r, g, b);
@@ -56,6 +56,6 @@ impl From<Srgb> for Vec3<Hsi> {
         let i = (r + g + b) / 3.0;
         let h = util::calculate_hsl_hue(r, g, b, max, min);
 
-        Vec3::new(h, s, i)
+        Color::new(h, s, i)
     }
 }

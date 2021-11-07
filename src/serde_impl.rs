@@ -1,12 +1,13 @@
 use std::fmt;
+use std::marker::PhantomData;
 
 use serde::de::{Error, SeqAccess, Visitor};
 use serde::ser::SerializeTupleStruct;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
-use crate::{Float, Vec3};
+use crate::{Color, Float};
 
-impl Serialize for Vec3 {
+impl<SPACE> Serialize for Color<SPACE> {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
@@ -20,16 +21,16 @@ impl Serialize for Vec3 {
     }
 }
 
-impl<'de> Deserialize<'de> for Vec3 {
+impl<'de, SPACE> Deserialize<'de> for Color<SPACE> {
     fn deserialize<D: Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        deserializer.deserialize_tuple_struct("Vec3", 3, Vec3Visitor)
+        deserializer.deserialize_tuple_struct("Vec3", 3, Vec3Visitor(PhantomData))
     }
 }
 
-struct Vec3Visitor;
+struct Vec3Visitor<SPACE>(PhantomData<SPACE>);
 
-impl<'de> Visitor<'de> for Vec3Visitor {
-    type Value = Vec3;
+impl<'de, SPACE> Visitor<'de> for Vec3Visitor<SPACE> {
+    type Value = Color<SPACE>;
 
     fn expecting(&self, f: &mut fmt::Formatter) -> fmt::Result {
         fmt::Formatter::write_str(f, "tuple struct Vec3")
@@ -46,6 +47,6 @@ impl<'de> Visitor<'de> for Vec3Visitor {
         let field2 = SeqAccess::next_element::<Float>(&mut seq)?
             .ok_or_else(|| Error::invalid_length(2, &EXP))?;
 
-        Ok(Vec3::new(field0, field1, field2))
+        Ok(Color::new(field0, field1, field2))
     }
 }

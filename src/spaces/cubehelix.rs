@@ -1,5 +1,5 @@
 use crate::spaces::Srgb;
-use crate::{Float, From, Vec3};
+use crate::{Float, From, Color};
 
 use super::CubeHelix;
 
@@ -11,8 +11,8 @@ const BCAD: Float = M[1] * M[2] - M[0] * M[3];
 pub(crate) const DEG_TO_RAD: Float = float!(PI) / 180.0;
 pub(crate) const RAD_TO_DEG: Float = 180.0 / float!(PI);
 
-impl From<CubeHelix> for Vec3<Srgb> {
-    fn from(cubehelix: Vec3<CubeHelix>) -> Self {
+impl From<CubeHelix> for Color<Srgb> {
+    fn from(cubehelix: Color<CubeHelix>) -> Self {
         let (h, s, l) = cubehelix.tuple();
 
         let h = (h + 120.0) * DEG_TO_RAD;
@@ -21,7 +21,7 @@ impl From<CubeHelix> for Vec3<Srgb> {
         let cosh = h.cos();
         let sinh = h.sin();
 
-        Vec3::new(
+        Color::new(
             l + amp * (M[0] * cosh + M[1] * sinh),
             l + amp * (M[2] * cosh + M[3] * sinh),
             l + amp * (M[4] * cosh + M[5] * sinh),
@@ -29,8 +29,8 @@ impl From<CubeHelix> for Vec3<Srgb> {
     }
 }
 
-impl From<Srgb> for Vec3<CubeHelix> {
-    fn from(rgb: Vec3<Srgb>) -> Self {
+impl From<Srgb> for Color<CubeHelix> {
+    fn from(rgb: Color<Srgb>) -> Self {
         let (red, green, blue) = rgb.tuple();
         let l = (BCAD * blue + red * DE - green * BE) / (BCAD + DE - BE);
 
@@ -49,6 +49,6 @@ impl From<Srgb> for Vec3<CubeHelix> {
             0.0
         };
 
-        Vec3::new(h, s, l)
+        Color::new(h, s, l)
     }
 }

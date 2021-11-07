@@ -1,10 +1,10 @@
 #![macro_use]
 
-use crate::{spaces::Lab, util, Float, Vec3};
+use crate::{spaces::Lab, util, Float, Color};
 
 const PI: Float = float!(PI);
 
-pub(crate) fn lab_to_lch<LAB: Lab, WHITE>(lab: Vec3<LAB, WHITE>) -> Vec3<LAB::Lch, WHITE> {
+pub(crate) fn lab_to_lch<LAB: Lab>(lab: Color<LAB>) -> Color<LAB::Lch> {
     let (l, a, b) = lab.tuple();
 
     let c = (a * a + b * b).sqrt();
@@ -14,10 +14,10 @@ pub(crate) fn lab_to_lch<LAB: Lab, WHITE>(lab: Vec3<LAB, WHITE>) -> Vec3<LAB::Lc
         0.0
     };
 
-    Vec3::new(l, c, h)
+    Color::new(l, c, h)
 }
 
-pub(crate) fn lch_to_lab<LAB: Lab, WHITE>(lch: Vec3<LAB::Lch, WHITE>) -> Vec3<LAB, WHITE> {
+pub(crate) fn lch_to_lab<LAB: Lab>(lch: Color<LAB::Lch>) -> Color<LAB> {
     let (l, c, h) = lch.tuple();
 
     let a = if c != 0.0 {
@@ -31,5 +31,5 @@ pub(crate) fn lch_to_lab<LAB: Lab, WHITE>(lch: Vec3<LAB::Lch, WHITE>) -> Vec3<LA
         0.0
     };
 
-    Vec3::new(l, a, b)
+    Color::new(l, a, b)
 }
