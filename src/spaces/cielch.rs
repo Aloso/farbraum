@@ -2,13 +2,13 @@ use crate::illuminate::{D50, D65};
 use crate::spaces::{lab, CieLab, CieLch, Srgb};
 use crate::{Color, From};
 
-impl<I> From<CieLch<I>> for Color<CieLab<I>> {
+impl<I: Default> From<CieLch<I>> for Color<CieLab<I>> {
     fn from(lch: Color<CieLch<I>>) -> Self {
         lab::lch_to_lab(lch)
     }
 }
 
-impl<I> From<CieLab<I>> for Color<CieLch<I>> {
+impl<I: Default> From<CieLab<I>> for Color<CieLch<I>> {
     fn from(lab: Color<CieLab<I>>) -> Self {
         lab::lab_to_lch(lab)
     }

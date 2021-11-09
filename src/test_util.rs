@@ -61,7 +61,7 @@ where
 }
 
 #[track_caller]
-pub fn round_trips<T, U>()
+pub fn round_trips<T: Copy, U>()
 where
     Color<T>: From<U>,
     Color<U>: From<T>,

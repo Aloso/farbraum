@@ -24,9 +24,6 @@ macro_rules! float {
     };
 }
 
-#[cfg(feature = "serde")]
-mod serde_impl;
-
 #[cfg(test)]
 mod test_util;
 
