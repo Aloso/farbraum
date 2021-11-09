@@ -1,9 +1,9 @@
 use crate::spaces::{util, Jab, Jch, Srgb};
-use crate::{Color, From};
+use crate::{Color, Into};
 
-impl From<Jab> for Color<Jch> {
-    fn from(jab: Color<Jab>) -> Self {
-        let (j, a, b) = jab.tuple();
+impl Into<Jch> for Color<Jab> {
+    fn into(self, _: Jch) -> Color<Jch> {
+        let (j, a, b) = self.tuple();
 
         let c = (a * a + b * b).sqrt();
         let h = if c > 0.0 {
@@ -12,27 +12,27 @@ impl From<Jab> for Color<Jch> {
             0.0
         };
 
-        Color::new(j, c, h)
+        Color::of(j, c, h)
     }
 }
 
-impl From<Jch> for Color<Jab> {
-    fn from(jch: Color<Jch>) -> Self {
-        let (j, c, h) = jch.tuple();
+impl Into<Jab> for Color<Jch> {
+    fn into(self, _: Jab) -> Color<Jab> {
+        let (j, c, h) = self.tuple();
         let (a, b) = util::cos_and_sin_radians(c, h);
 
-        Color::new(j, a, b)
+        Color::of(j, a, b)
     }
 }
 
-impl From<Srgb> for Color<Jch> {
-    fn from(rgb: Color<Srgb>) -> Self {
-        rgb.into::<Jab>().into()
+impl Into<Jch> for Color<Srgb> {
+    fn into(self, s: Jch) -> Color<Jch> {
+        self.into(Jab).into(s)
     }
 }
 
-impl From<Jch> for Color<Srgb> {
-    fn from(jch: Color<Jch>) -> Self {
-        jch.into::<Jab>().into()
+impl Into<Srgb> for Color<Jch> {
+    fn into(self, s: Srgb) -> Color<Srgb> {
+        self.into(Jab).into(s)
     }
 }

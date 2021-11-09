@@ -3,8 +3,8 @@
 This crate offers a simple API to convert between various color spaces:
 
 ```rs
-let hsv: Color<Hsv> = Color::new(120.0, 1.0, 1.0);
-let lrgb = hsv.into::<Srgb>().into::<LinearSrgb>();
+let hsv = Color::new(120.0, 1.0, 1.0, Hsv);
+let lrgb = hsv.into(Srgb).into(LinearSrgb);
 ```
 
 Most conversion functions are ported from the [culori](https://culorijs.org) javascript library. Some parts were modified to make the results more accurate.
@@ -61,18 +61,18 @@ There's no general rule in what ranges the values should be.
 
 ## Usage
 
-Colors are created with `Color::new()`. Make sure you specify the correct color space in the type:
+Colors are created with `Color::new()` or `Color::of()`. Use `of` if you want the color space to be inferred:
 
 ```rs
-let hsv: Color<Hsv> = Color::new(120.0, 1.0, 1.0);
+let hsv: Color<Hsv> = Color::of(120.0, 1.0, 1.0);
 // or
-let hsv = Color::<Hsv>::new(120.0, 1.0, 1.0);
+let hsv = Color::new(120.0, 1.0, 1.0, Hsv);
 ```
 
-To convert one color space to another, use the provided `into` method, which accepts the new color space as generic argument:
+To convert one color space to another, use the provided `into` method, which accepts the new color space:
 
 ```rs
-hsv.into::<Srgb>().into::<CieXyz<D65>>().into::<Jab>()
+hsv.into(Srgb).into(CieXyz(D65)).into(Jab)
 ```
 
 Note that the color spaces are zero-sized types, so they don't exist at runtime. If you want to choose a color space at runtime, you'll need to create an enum such as:
@@ -92,20 +92,20 @@ This can be used instead of the `farbraum`'s builtin color spaces. However, you'
 
 ```rs
 use farbraum::{
-    From, Color, illuminate::D50,
+    Into, Color, illuminate::D50,
     spaces::{Srgb, CieXyz, Hsl, CieLab, OkLab},
 };
 
 // Convert any color space to sRGB
-impl From<AnyColorSpace> for Color<Srgb> {
-    fn from(color: Color<AnyColorSpace>) -> Color<Srgb> {
-        let (a, b, c) = color.tuple();
-        match color.space() {
-            AnyColorSpace::Srgb      => Color::<Srgb>::new(a, b, c),
-            AnyColorSpace::CieXyzD50 => Color::<CieXyz<D50>>::new(a, b, c).into(),
-            AnyColorSpace::Hsl       => Color::<Hsl>::new(a, b, c).into(),
-            AnyColorSpace::CieLabD50 => Color::<CieLab<D50>>::new(a, b, c).into(),
-            AnyColorSpace::OkLab     => Color::<OkLab>::new(a, b, c).into(),
+impl Into<Srgb> for Color<AnyColorSpace> {
+    fn into(self, _: Srgb) -> Color<Srgb> {
+        let (a, b, c) = self.tuple();
+        match self.space() {
+            AnyColorSpace::Srgb      => Color::new(a, b, c, Srgb),
+            AnyColorSpace::CieXyzD50 => Color::new(a, b, c, CieXyz(D50)).into(),
+            AnyColorSpace::Hsl       => Color::new(a, b, c, Hsl).into(),
+            AnyColorSpace::CieLabD50 => Color::new(a, b, c, CieLab(D50)).into(),
+            AnyColorSpace::OkLab     => Color::new(a, b, c, OkLab).into(),
         }
     }
 }

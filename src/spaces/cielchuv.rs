@@ -1,19 +1,19 @@
 use crate::illuminate::D50;
 use crate::spaces::{util, CieLchuv, CieLuv, CieXyz, Srgb};
-use crate::{Color, From};
+use crate::{Color, Into};
 
-impl From<CieLchuv> for Color<CieLuv> {
-    fn from(lchuv: Color<CieLchuv>) -> Self {
-        let (l, c, h) = lchuv.tuple();
+impl Into<CieLuv> for Color<CieLchuv> {
+    fn into(self, _: CieLuv) -> Color<CieLuv> {
+        let (l, c, h) = self.tuple();
         let (u, v) = util::cos_and_sin_radians(c, h);
 
-        Color::new(l, u, v)
+        Color::of(l, u, v)
     }
 }
 
-impl From<CieLuv> for Color<CieLchuv> {
-    fn from(luv: Color<CieLuv>) -> Self {
-        let (l, u, v) = luv.tuple();
+impl Into<CieLchuv> for Color<CieLuv> {
+    fn into(self, _: CieLchuv) -> Color<CieLchuv> {
+        let (l, u, v) = self.tuple();
         let c = (u * u + v * v).sqrt();
 
         let h = if c > 0.0 {
@@ -21,19 +21,19 @@ impl From<CieLuv> for Color<CieLchuv> {
         } else {
             0.0
         };
-        Color::new(l, c, h)
+        Color::of(l, c, h)
     }
 }
 
-impl From<Srgb> for Color<CieLchuv> {
-    fn from(rgb: Color<Srgb>) -> Self {
-        rgb.into::<CieXyz<D50>>().into::<CieLuv>().into()
+impl Into<CieLchuv> for Color<Srgb> {
+    fn into(self, s: CieLchuv) -> Color<CieLchuv> {
+        self.into(CieXyz(D50)).into(CieLuv).into(s)
     }
 }
 
-impl From<CieLchuv> for Color<Srgb> {
-    fn from(lchuv: Color<CieLchuv>) -> Self {
-        lchuv.into::<CieLuv>().into::<CieXyz<D50>>().into()
+impl Into<Srgb> for Color<CieLchuv> {
+    fn into(self, s: Srgb) -> Color<Srgb> {
+        self.into(CieLuv).into(CieXyz(D50)).into(s)
     }
 }
 

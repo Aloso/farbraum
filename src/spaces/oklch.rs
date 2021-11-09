@@ -1,39 +1,39 @@
 use crate::spaces::{lab, LinearSrgb, OkLab, OkLch, Srgb};
-use crate::{Color, From};
+use crate::{Color, Into};
 
-impl From<OkLab> for Color<OkLch> {
-    fn from(lab: Color<OkLab>) -> Self {
-        lab::lab_to_lch(lab)
+impl Into<OkLab> for Color<OkLch> {
+    fn into(self, _: OkLab) -> Color<OkLab> {
+        lab::lch_to_lab(self)
     }
 }
 
-impl From<OkLch> for Color<OkLab> {
-    fn from(lch: Color<OkLch>) -> Self {
-        lab::lch_to_lab(lch)
+impl Into<OkLch> for Color<OkLab> {
+    fn into(self, _: OkLch) -> Color<OkLch> {
+        lab::lab_to_lch(self)
     }
 }
 
-impl From<OkLch> for Color<LinearSrgb> {
-    fn from(lch: Color<OkLch>) -> Self {
-        lch.into::<OkLab>().into()
+impl Into<LinearSrgb> for Color<OkLch> {
+    fn into(self, s: LinearSrgb) -> Color<LinearSrgb> {
+        self.into(OkLab).into(s)
     }
 }
 
-impl From<LinearSrgb> for Color<OkLch> {
-    fn from(rgb: Color<LinearSrgb>) -> Self {
-        rgb.into::<OkLab>().into()
+impl Into<OkLch> for Color<LinearSrgb> {
+    fn into(self, s: OkLch) -> Color<OkLch> {
+        self.into(OkLab).into(s)
     }
 }
 
-impl From<OkLch> for Color<Srgb> {
-    fn from(lch: Color<OkLch>) -> Self {
-        lch.into::<OkLab>().into::<LinearSrgb>().into()
+impl Into<Srgb> for Color<OkLch> {
+    fn into(self, s: Srgb) -> Color<Srgb> {
+        self.into(OkLab).into(LinearSrgb).into(s)
     }
 }
 
-impl From<Srgb> for Color<OkLch> {
-    fn from(rgb: Color<Srgb>) -> Self {
-        rgb.into::<LinearSrgb>().into::<OkLab>().into()
+impl Into<OkLch> for Color<Srgb> {
+    fn into(self, s: OkLch) -> Color<OkLch> {
+        self.into(LinearSrgb).into(OkLab).into(s)
     }
 }
 

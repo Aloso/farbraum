@@ -1,6 +1,6 @@
 use core::fmt;
 
-use crate::{Float, From};
+use crate::{Float, Into};
 
 /// A color in a specific color space, consisting of 3 [`Float`] components.
 ///
@@ -17,7 +17,7 @@ impl<S> Color<S> {
     /// The color components must be provided in the correct order, e.g.
     /// `Color::new(r, g, b)` or `Color::new(x, y, z)`.
     #[allow(clippy::just_underscores_and_digits)]
-    pub fn new(_0: Float, _1: Float, _2: Float) -> Self
+    pub fn of(_0: Float, _1: Float, _2: Float) -> Self
     where
         S: Default,
     {
@@ -29,7 +29,7 @@ impl<S> Color<S> {
     /// The color components must be provided in the correct order, e.g.
     /// `Color::new(r, g, b, Srgb)` or `Color::new(x, y, z, Srgb)`.
     #[allow(clippy::just_underscores_and_digits)]
-    pub const fn new_with(_0: Float, _1: Float, _2: Float, space: S) -> Self {
+    pub const fn new(_0: Float, _1: Float, _2: Float, space: S) -> Self {
         Color(_0, _1, _2, space)
     }
 
@@ -51,21 +51,21 @@ impl<S> Color<S> {
     /// use farbraum::Color;
     /// use farbraum::spaces::{Hsv, Srgb, LinearSrgb};
     ///
-    /// let hsv: Color<Hsv> = Color::new(120.0, 1.0, 1.0);
-    /// let l_rgb = hsv.into::<Srgb>().into::<LinearSrgb>();
+    /// let hsv: Color<Hsv> = Color::of(120.0, 1.0, 1.0);
+    /// let l_rgb = hsv.into(Srgb).into(LinearSrgb);
     ///
-    /// assert_eq!(l_rgb, Color::new(0.0, 1.0, 0.0));
+    /// assert_eq!(l_rgb, Color::of(0.0, 1.0, 0.0));
     /// ```
     ///
     /// **Implementation note:**
     ///
-    /// Conversion uses the [`From`] trait. This is _not_ the same trait
-    /// as `From` from the standard library.
-    pub fn into<SPACE>(self) -> Color<SPACE>
+    /// Conversion uses the [`Into`] trait. This is _not_ the same trait
+    /// as `Into` from the standard library.
+    pub fn into<SPACE>(self, s: SPACE) -> Color<SPACE>
     where
-        Color<SPACE>: From<S>,
+        Color<S>: Into<SPACE>,
     {
-        From::from(self)
+        Into::into(self, s)
     }
 
     /// Borrow first component

@@ -1,6 +1,6 @@
 #![macro_use]
 
-use crate::{spaces::Srgb, Color, From};
+use crate::{spaces::Srgb, Color, Into};
 
 #[macro_export]
 macro_rules! assert_similar {
@@ -29,29 +29,29 @@ macro_rules! assert_similar {
 
 fn get_colors() -> Vec<Color<Srgb>> {
     vec![
-        Color::<Srgb>::new(0.0, 0.0, 0.0),
-        Color::<Srgb>::new(1.0, 1.0, 1.0),
-        Color::<Srgb>::new(1.0, 0.0, 0.0),
-        Color::<Srgb>::new(0.4, 0.1, 0.0),
-        Color::<Srgb>::new(1.0, 0.1, 0.0),
-        Color::<Srgb>::new(0.4, 1.0, 0.0),
-        Color::<Srgb>::new(0.4, 1.0, 1.0),
-        Color::<Srgb>::new(0.9, 0.2, 1.0),
-        Color::<Srgb>::new(0.5, 0.5, 0.5),
-        Color::<Srgb>::new(0.5, 0.5, 0.55),
-        Color::<Srgb>::new(0.001, 0.001, 0.001),
-        Color::<Srgb>::new(0.617, 0.367, 0.964),
+        Color::<Srgb>::of(0.0, 0.0, 0.0),
+        Color::<Srgb>::of(1.0, 1.0, 1.0),
+        Color::<Srgb>::of(1.0, 0.0, 0.0),
+        Color::<Srgb>::of(0.4, 0.1, 0.0),
+        Color::<Srgb>::of(1.0, 0.1, 0.0),
+        Color::<Srgb>::of(0.4, 1.0, 0.0),
+        Color::<Srgb>::of(0.4, 1.0, 1.0),
+        Color::<Srgb>::of(0.9, 0.2, 1.0),
+        Color::<Srgb>::of(0.5, 0.5, 0.5),
+        Color::<Srgb>::of(0.5, 0.5, 0.55),
+        Color::<Srgb>::of(0.001, 0.001, 0.001),
+        Color::<Srgb>::of(0.617, 0.367, 0.964),
     ]
 }
 
 #[track_caller]
-pub fn round_trips_srgb<T>()
+pub fn round_trips_srgb<T: Default>()
 where
-    Color<T>: From<Srgb>,
-    Color<Srgb>: From<T>,
+    Color<T>: Into<Srgb>,
+    Color<Srgb>: Into<T>,
 {
     for color in get_colors() {
-        let converted = color.into::<T>().into::<Srgb>();
+        let converted = color.into(T::default()).into(Srgb);
         assert_similar!(
             color,
             converted,
@@ -61,22 +61,22 @@ where
 }
 
 #[track_caller]
-pub fn round_trips<T: Copy, U>()
+pub fn round_trips<T: Default + Copy, U: Default>()
 where
-    Color<T>: From<U>,
-    Color<U>: From<T>,
-    Color<T>: From<Srgb>,
-    Color<Srgb>: From<T>,
+    Color<T>: Into<U>,
+    Color<U>: Into<T>,
+    Color<Srgb>: Into<T>,
+    Color<T>: Into<Srgb>,
     T: core::fmt::Debug + Default,
 {
     for color in get_colors() {
-        let init = color.into::<T>();
-        let converted = init.into::<U>().into::<T>();
+        let init = color.into(T::default());
+        let converted = init.into(U::default()).into(T::default());
         assert_similar!(init, converted, finally: {
             println!("--> color: {:?}", color);
             println!("--> init: {:?}", init);
         });
-        assert_similar!(color, converted.into(), finally: {
+        assert_similar!(color, converted.into(Srgb), finally: {
             println!("--> color: {:?}", color);
         });
     }

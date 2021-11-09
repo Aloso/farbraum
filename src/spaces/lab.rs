@@ -14,7 +14,7 @@ where
         0.0
     };
 
-    Color::new(l, c, h)
+    Color::of(l, c, h)
 }
 
 pub(crate) fn lch_to_lab<LAB: Lab>(lch: Color<LAB::Lch>) -> Color<LAB>
@@ -24,5 +24,5 @@ where
     let (l, c, h) = lch.tuple();
     let (a, b) = util::cos_and_sin_radians(c, h);
 
-    Color::new(l, a, b)
+    Color::of(l, a, b)
 }

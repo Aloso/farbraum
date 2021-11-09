@@ -1,6 +1,6 @@
 use crate::illuminate::{D50, D50_WHITE};
 use crate::spaces::{util, CieLuv, CieXyz, Srgb};
-use crate::{Color, Float, From};
+use crate::{Color, Float, Into};
 
 use super::xyz_d50::{E, K};
 
@@ -11,9 +11,9 @@ fn v_fn(x: Float, y: Float, z: Float) -> Float {
     (9.0 * y) / (x + 15.0 * y + 3.0 * z)
 }
 
-impl From<CieLuv> for Color<CieXyz<D50>> {
-    fn from(luv: Color<CieLuv>) -> Self {
-        let (l, u, v) = luv.tuple();
+impl Into<CieXyz<D50>> for Color<CieLuv> {
+    fn into(self, _: CieXyz<D50>) -> Color<CieXyz<D50>> {
+        let (l, u, v) = self.tuple();
 
         let (xn, yn, zn) = D50_WHITE;
 
@@ -32,7 +32,7 @@ impl From<CieLuv> for Color<CieXyz<D50>> {
         let x = (y * (9.0 * up)) / (4.0 * vp);
         let z = (y * (12.0 - 3.0 * up - 20.0 * vp)) / (4.0 * vp);
 
-        Color::new(x, y, z)
+        Color::of(x, y, z)
     }
 }
 
@@ -44,9 +44,9 @@ fn l_fn(value: Float) -> Float {
     }
 }
 
-impl From<CieXyz<D50>> for Color<CieLuv> {
-    fn from(xyz: Color<CieXyz<D50>>) -> Self {
-        let (x, y, z) = xyz.tuple();
+impl Into<CieLuv> for Color<CieXyz<D50>> {
+    fn into(self, _: CieLuv) -> Color<CieLuv> {
+        let (x, y, z) = self.tuple();
 
         let (xn, yn, zn) = D50_WHITE;
 
@@ -67,19 +67,19 @@ impl From<CieXyz<D50>> for Color<CieLuv> {
             v = 13.0 * l * (v - vn);
         }
 
-        Color::new(l, u, v)
+        Color::of(l, u, v)
     }
 }
 
-impl From<Srgb> for Color<CieLuv> {
-    fn from(rgb: Color<Srgb>) -> Self {
-        rgb.into::<CieXyz<D50>>().into()
+impl Into<CieLuv> for Color<Srgb> {
+    fn into(self, s: CieLuv) -> Color<CieLuv> {
+        self.into(CieXyz(D50)).into(s)
     }
 }
 
-impl From<CieLuv> for Color<Srgb> {
-    fn from(luv: Color<CieLuv>) -> Self {
-        luv.into::<CieXyz<D50>>().into()
+impl Into<Srgb> for Color<CieLuv> {
+    fn into(self, s: Srgb) -> Color<Srgb> {
+        self.into(CieXyz(D50)).into(s)
     }
 }
 

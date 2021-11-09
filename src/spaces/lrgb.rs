@@ -1,5 +1,5 @@
 use crate::spaces::{LinearSrgb, Srgb};
-use crate::{Float, From, Color};
+use crate::{Color, Float, Into};
 
 fn positive_signum(n: Float) -> Float {
     if n >= 0.0 {
@@ -18,10 +18,10 @@ fn f1(c: Float) -> Float {
     }
 }
 
-impl From<LinearSrgb> for Color<Srgb> {
-    fn from(rgb: Color<LinearSrgb>) -> Self {
-        let (r, g, b) = rgb.tuple();
-        Color::new(f1(r), f1(g), f1(b))
+impl Into<Srgb> for Color<LinearSrgb> {
+    fn into(self, _: Srgb) -> Color<Srgb> {
+        let (r, g, b) = self.tuple();
+        Color::of(f1(r), f1(g), f1(b))
     }
 }
 
@@ -34,9 +34,9 @@ fn f2(c: Float) -> Float {
     }
 }
 
-impl From<Srgb> for Color<LinearSrgb> {
-    fn from(rgb: Color<Srgb>) -> Self {
-        let (r, g, b) = rgb.tuple();
-        Color::new(f2(r), f2(g), f2(b))
+impl Into<LinearSrgb> for Color<Srgb> {
+    fn into(self, _: LinearSrgb) -> Color<LinearSrgb> {
+        let (r, g, b) = self.tuple();
+        Color::of(f2(r), f2(g), f2(b))
     }
 }

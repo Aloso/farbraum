@@ -1,5 +1,4 @@
 use core::fmt;
-use std::marker::PhantomData;
 
 use crate::illuminate::D65;
 
@@ -60,9 +59,7 @@ pub struct Srgb;
 
 /// CIE Lab color space.
 #[derive(Clone, Copy, PartialEq, Eq, Default)]
-pub struct CieLab<I> {
-    wp: PhantomData<I>,
-}
+pub struct CieLab<I>(I);
 
 impl<I: fmt::Debug + Default> fmt::Debug for CieLab<I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -72,9 +69,7 @@ impl<I: fmt::Debug + Default> fmt::Debug for CieLab<I> {
 
 /// CIE LCh color space.
 #[derive(Clone, Copy, PartialEq, Eq, Default)]
-pub struct CieLch<I> {
-    wp: PhantomData<I>,
-}
+pub struct CieLch<I>(I);
 
 impl<I: fmt::Debug + Default> fmt::Debug for CieLch<I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -89,9 +84,7 @@ impl<I> Lab for CieLab<I> {
 
 /// CIE XYZ color space.
 #[derive(Clone, Copy, PartialEq, Eq, Default)]
-pub struct CieXyz<I> {
-    illuminate: PhantomData<I>,
-}
+pub struct CieXyz<I>(I);
 
 impl<I: fmt::Debug + Default> fmt::Debug for CieXyz<I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {

@@ -1,6 +1,6 @@
 use crate::illuminate::D65;
 use crate::spaces::{CieXyz, Jab, Srgb};
-use crate::{Color, Float, From};
+use crate::{Color, Float, Into};
 
 const N: Float = 0.1593017578125; // = 2610 / Math.pow(2, 14);
 const P: Float = 134.034375; // = 1.7 * 2523 / Math.pow(2, 5);
@@ -24,9 +24,9 @@ fn rel(v: Float) -> Float {
     v / 203.0
 }
 
-impl From<Jab> for Color<CieXyz<D65>> {
-    fn from(jab: Color<Jab>) -> Self {
-        let (j, a, b) = jab.tuple();
+impl Into<CieXyz<D65>> for Color<Jab> {
+    fn into(self, _: CieXyz<D65>) -> Color<CieXyz<D65>> {
+        let (j, a, b) = self.tuple();
 
         let i = (j + D0) / (0.44 + 0.56 * (j + D0));
 
@@ -38,7 +38,7 @@ impl From<Jab> for Color<CieXyz<D65>> {
         let y = rel(-0.3250758740427037 * l + 1.571847038366936 * m - 0.218253831867294 * s);
         let z = rel(-0.09098281098284756 * l - 0.312728290523074 * m + 1.52276656130526 * s);
 
-        Color::new(x, y, z)
+        Color::of(x, y, z)
     }
 }
 
@@ -57,9 +57,9 @@ fn abs(v: Float) -> Float {
     (v * 203.0).max(0.0)
 }
 
-impl From<CieXyz<D65>> for Color<Jab> {
-    fn from(xyz: Color<CieXyz<D65>>) -> Self {
-        let (x, y, z) = xyz.tuple();
+impl Into<Jab> for Color<CieXyz<D65>> {
+    fn into(self, _: Jab) -> Color<Jab> {
+        let (x, y, z) = self.tuple();
 
         let x = abs(x);
         let y = abs(y);
@@ -78,19 +78,19 @@ impl From<CieXyz<D65>> for Color<Jab> {
         let a = 3.524 * l - 4.066708 * m + 0.542708 * s;
         let b = 0.199076 * l + 1.096799 * m - 1.295875 * s;
 
-        Color::new(j, a, b)
+        Color::of(j, a, b)
     }
 }
 
-impl From<Srgb> for Color<Jab> {
-    fn from(rgb: Color<Srgb>) -> Self {
-        rgb.into::<CieXyz<D65>>().into()
+impl Into<Jab> for Color<Srgb> {
+    fn into(self, s: Jab) -> Color<Jab> {
+        self.into(CieXyz(D65)).into(s)
     }
 }
 
-impl From<Jab> for Color<Srgb> {
-    fn from(jab: Color<Jab>) -> Self {
-        jab.into::<CieXyz<D65>>().into()
+impl Into<Srgb> for Color<Jab> {
+    fn into(self, s: Srgb) -> Color<Srgb> {
+        self.into(CieXyz(D65)).into(s)
     }
 }
 
@@ -102,25 +102,25 @@ mod tests {
     use crate::{Color, Float};
 
     fn rgb(r: Float, g: Float, b: Float) -> Color<Srgb> {
-        Color::new(r, g, b)
+        Color::of(r, g, b)
     }
 
     fn jab(l: Float, a: Float, b: Float) -> Color<Jab> {
-        Color::new(l, a, b)
+        Color::of(l, a, b)
     }
 
     #[test]
     fn test_jab_to_rgb() {
         assert_similar!(
-            jab(0.22206540515, -0.000153429, -0.000094388).into(),
+            jab(0.22206540515, -0.000153429, -0.000094388).into(Srgb),
             rgb(1.0, 1.0, 1.0)
         );
         assert_similar!(
-            jab(3.2311742677852644e-27, 0.0, 0.0).into(),
+            jab(3.2311742677852644e-27, 0.0, 0.0).into(Srgb),
             rgb(0.0, 0.0, 0.0)
         );
         assert_similar!(
-            jab(0.13439374892, 0.11788937861, 0.111882888348).into(),
+            jab(0.13439374892, 0.11788937861, 0.111882888348).into(Srgb),
             rgb(1.0, 0.0, 0.0)
         );
     }

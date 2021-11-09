@@ -35,6 +35,6 @@ pub use color::Color;
 pub mod illuminate;
 pub mod spaces;
 
-pub trait From<SPACE> {
-    fn from(xyz: Color<SPACE>) -> Self;
+pub trait Into<SPACE> {
+    fn into(self, space: SPACE) -> Color<SPACE>;
 }

@@ -1,9 +1,9 @@
 use crate::spaces::{Hsv, Hwb, Srgb};
-use crate::{Color, From};
+use crate::{Color, Into};
 
-impl From<Hwb> for Color<Hsv> {
-    fn from(hwb: Color<Hwb>) -> Self {
-        let (h, mut w, mut b) = hwb.tuple();
+impl Into<Hsv> for Color<Hwb> {
+    fn into(self, _: Hsv) -> Color<Hsv> {
+        let (h, mut w, mut b) = self.tuple();
 
         // normalize w + b to 1
         if w + b > 1.0 {
@@ -11,30 +11,30 @@ impl From<Hwb> for Color<Hsv> {
             w /= s;
             b /= s;
         }
-        Color::new(h, if b == 1.0 { 1.0 } else { 1.0 - w / (1.0 - b) }, 1.0 - b)
+        Color::of(h, if b == 1.0 { 1.0 } else { 1.0 - w / (1.0 - b) }, 1.0 - b)
     }
 }
 
-impl From<Hwb> for Color<Srgb> {
-    fn from(hwb: Color<Hwb>) -> Self {
-        hwb.into::<Hsv>().into()
+impl Into<Srgb> for Color<Hwb> {
+    fn into(self, s: Srgb) -> Color<Srgb> {
+        self.into(Hsv).into(s)
     }
 }
 
-impl From<Hsv> for Color<Hwb> {
-    fn from(hsv: Color<Hsv>) -> Self {
-        let (h, s, v) = hsv.tuple();
+impl Into<Hwb> for Color<Hsv> {
+    fn into(self, _: Hwb) -> Color<Hwb> {
+        let (h, s, v) = self.tuple();
 
         let w = (1.0 - s) * v;
         let b = 1.0 - v;
 
-        Color::new(h, w, b)
+        Color::of(h, w, b)
     }
 }
 
-impl From<Srgb> for Color<Hwb> {
-    fn from(rgb: Color<Srgb>) -> Self {
-        rgb.into::<Hsv>().into()
+impl Into<Hwb> for Color<Srgb> {
+    fn into(self, s: Hwb) -> Color<Hwb> {
+        self.into(Hsv).into(s)
     }
 }
 
