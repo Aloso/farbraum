@@ -25,3 +25,39 @@ impl From<DLab> for Color<Srgb> {
         lab.into::<CieLab<D65>>().into()
     }
 }
+
+#[cfg(test)]
+mod tests {
+
+    use crate::spaces::{DLab, Srgb};
+    use crate::test_util::round_trips_srgb;
+    use crate::{Color, Float};
+
+    fn rgb(r: Float, g: Float, b: Float) -> Color<Srgb> {
+        Color::new(r, g, b)
+    }
+
+    fn dlab(l: Float, a: Float, b: Float) -> Color<DLab> {
+        Color::new(l, a, b)
+    }
+
+    #[test]
+    fn test_dlab() {
+        assert_eq!(
+            rgb(1.0, 1.0, 1.0).into(),
+            dlab(100.00000042980086, 0.0, 0.0)
+        );
+        let x11 = 1.0 / 15.0;
+        assert_eq!(rgb(x11, x11, x11).into(), dlab(5.938147698096487, 0.0, 0.0));
+        assert_eq!(rgb(0.0, 0.0, 0.0).into(), dlab(0.0, 0.0, 0.0));
+        assert_eq!(
+            rgb(1.0, 0.0, 0.0).into(),
+            dlab(57.29278122742003, 39.49866237448939, 30.518156672666002)
+        );
+    }
+
+    #[test]
+    fn test_dlab_roundtrips() {
+        round_trips_srgb::<DLab>();
+    }
+}

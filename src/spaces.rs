@@ -20,8 +20,28 @@ mod jab;
 mod jch;
 mod lab;
 mod lrgb;
+mod oklab;
+mod oklch;
 mod xyz_d50;
 mod xyz_d65;
+
+// Missing color spaces from culori:
+//     OkHsl, OkHsv, DCI-P3, ProPhoto, Rec.2020
+//
+//
+// CIE:
+//     CIECAM97s, CIECAM02, iCAM06, CAM16, YUV-1960, UVW
+// RGB:
+//     Adobe Wide Gamut RGB, ProPhoto, scRGB, DCI-P3, Rec.709, Rec.2020, Rec.2100
+// YUV:
+//     YCbCr, YCoCg, YPbPr, YDdDr, YIQ, xvYCC, sYCC, YIQ
+// Subtractive color spaces:
+//     CMY, CMYK, CcMmYK, RYB
+// Other:
+//     IPT, ICtCp, XYB, SRLAB2, OSA-UCS, Coloroid, LMS, Hexachrome, Yxy, HCL, polarLAB
+//
+//
+// Color spaces I'd like to add: IPT, ICtCp, Yxy
 
 mod util;
 
@@ -46,7 +66,7 @@ pub struct CieLab<I> {
 
 impl<I: fmt::Debug + Default> fmt::Debug for CieLab<I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CieLab-{:?}", I::default())
+        write!(f, "CieLab<{:?}>", I::default())
     }
 }
 
@@ -58,7 +78,7 @@ pub struct CieLch<I> {
 
 impl<I: fmt::Debug + Default> fmt::Debug for CieLch<I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CieLch-{:?}", I::default())
+        write!(f, "CieLch<{:?}>", I::default())
     }
 }
 
@@ -75,7 +95,7 @@ pub struct CieXyz<I> {
 
 impl<I: fmt::Debug + Default> fmt::Debug for CieXyz<I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CieXyz-{:?}", I::default())
+        write!(f, "CieXyz<{:?}>", I::default())
     }
 }
 
@@ -110,6 +130,19 @@ pub struct Jab;
 /// Jch color space.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct Jch;
+
+/// Ok Lab color space.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub struct OkLab;
+
+/// Ok LCh color space.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub struct OkLch;
+
+impl Lab for OkLab {
+    type Lch = OkLch;
+    type Illuminate = D65;
+}
 
 /// HSI color space.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]

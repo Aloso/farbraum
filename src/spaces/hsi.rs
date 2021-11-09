@@ -59,3 +59,47 @@ impl From<Srgb> for Color<Hsi> {
         Color::new(h, s, i)
     }
 }
+
+#[cfg(test)]
+mod tests {
+
+    use crate::spaces::{Hsi, Srgb};
+    use crate::test_util::round_trips_srgb;
+    use crate::{Color, Float};
+
+    fn rgb(r: Float, g: Float, b: Float) -> Color<Srgb> {
+        Color::new(r, g, b)
+    }
+
+    fn hsi(l: Float, a: Float, b: Float) -> Color<Hsi> {
+        Color::new(l, a, b)
+    }
+
+    #[test]
+    fn test_hsi_to_rgb() {
+        assert_eq!(hsi(0.0, 0.0, 0.0).into(), rgb(0.0, 0.0, 0.0));
+        assert_eq!(hsi(60.0, 0.25, 0.0).into(), rgb(0.0, 0.0, 0.0));
+        assert_eq!(hsi(0.0, 0.0, 0.5).into(), rgb(0.5, 0.5, 0.5));
+        assert_eq!(hsi(60.0, 0.0, 0.25).into(), rgb(0.25, 0.25, 0.25));
+        assert_eq!(hsi(100.0, 0.0, 0.5).into(), rgb(0.5, 0.5, 0.5));
+    }
+
+    #[test]
+    fn test_rgb_to_hsi() {
+        assert_eq!(hsi(0.0, 0.0, 0.0), rgb(0.0, 0.0, 0.0).into());
+        assert_eq!(hsi(0.0, 0.0, 0.25), rgb(0.25, 0.25, 0.25).into());
+
+        // red, yellow, green, cyan, blue, magenta
+        assert_eq!(hsi(0.0, 1.0, 1.0 / 3.0), rgb(1.0, 0.0, 0.0).into());
+        assert_eq!(hsi(60.0, 1.0, 2.0 / 3.0), rgb(1.0, 1.0, 0.0).into());
+        assert_eq!(hsi(120.0, 1.0, 1.0 / 3.0), rgb(0.0, 1.0, 0.0).into());
+        assert_eq!(hsi(180.0, 1.0, 2.0 / 3.0), rgb(0.0, 1.0, 1.0).into());
+        assert_eq!(hsi(240.0, 1.0, 1.0 / 3.0), rgb(0.0, 0.0, 1.0).into());
+        assert_eq!(hsi(300.0, 1.0, 2.0 / 3.0), rgb(1.0, 0.0, 1.0).into());
+    }
+
+    #[test]
+    fn test_hsi_roundtrips() {
+        round_trips_srgb::<Hsi>();
+    }
+}

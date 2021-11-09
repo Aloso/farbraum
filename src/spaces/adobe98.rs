@@ -46,3 +46,36 @@ impl From<Srgb> for Color<Adobe98> {
         rgb.into::<CieXyz<D65>>().into()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::spaces::{Adobe98, Srgb};
+    use crate::test_util::round_trips_srgb;
+    use crate::{Color, Float};
+
+    fn rgb(r: Float, g: Float, b: Float) -> Color<Srgb> {
+        Color::new(r, g, b)
+    }
+
+    fn a98(r: Float, g: Float, b: Float) -> Color<Adobe98> {
+        Color::new(r, g, b)
+    }
+
+    #[test]
+    fn test_adobe98() {
+        assert_similar!(
+            rgb(1.0, 1.0, 1.0).into(),
+            a98(1.0000487485, 0.9999895104, 0.99989495005)
+        );
+        assert_similar!(rgb(0.0, 0.0, 0.0).into(), a98(0.0, 0.0, 0.0));
+        assert_similar!(
+            rgb(1.0, 0.0, 0.0).into(),
+            a98(0.85865373273, -0.000124357058167, 0.000221323599465)
+        );
+    }
+
+    #[test]
+    fn test_adobe98_roundtrips() {
+        round_trips_srgb::<Adobe98>();
+    }
+}

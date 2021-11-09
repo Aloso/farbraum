@@ -36,3 +36,16 @@ impl From<CieLchuv> for Color<Srgb> {
         lchuv.into::<CieLuv>().into::<CieXyz<D50>>().into()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::spaces::{CieLchuv, CieLuv};
+    use crate::test_util::{round_trips, round_trips_srgb};
+
+    #[test]
+    fn test_cielchuv_roundtrips() {
+        round_trips_srgb::<CieLchuv>();
+        round_trips::<CieLchuv, CieLuv>();
+        round_trips::<CieLuv, CieLchuv>();
+    }
+}

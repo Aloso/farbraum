@@ -15,7 +15,15 @@ pub(crate) fn deg_to_rad(rad: Float) -> Float {
 }
 
 pub(crate) fn min_max(r: Float, g: Float, b: Float) -> (Float, Float) {
-    (r.max(g).max(b), r.min(g).min(b))
+    (r.min(g).min(b), r.max(g).max(b))
+}
+
+pub(crate) fn no_nan(n: Float) -> Float {
+    if n.is_nan() {
+        0.0
+    } else {
+        n
+    }
 }
 
 /// Calculates the first component (hue) for HSL, HSV, HSI and HWB color spaces

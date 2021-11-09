@@ -37,3 +37,14 @@ impl From<Srgb> for Color<Hwb> {
         rgb.into::<Hsv>().into()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::spaces::{Hsv, Hwb};
+    use crate::test_util::round_trips;
+
+    #[test]
+    fn test_hwb_roundtrips() {
+        round_trips::<Hwb, Hsv>();
+    }
+}

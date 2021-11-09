@@ -33,7 +33,7 @@ impl From<DLch> for Color<CieLab<D65>> {
 
         let l2 = (E.powf((l * KE) / factor()) - 1.0) / 0.0039;
 
-        let g = ((0.0435 * c * KCH * KE).log(E) - 1.0) / 0.075;
+        let g = (E.powf(0.0435 * c * KCH * KE) - 1.0) / 0.075;
         let e = g * (util::deg_to_rad(h) - DELTA).cos();
         let f = g * (util::deg_to_rad(h) - DELTA).sin();
 
@@ -75,5 +75,41 @@ impl From<Srgb> for Color<DLch> {
 impl From<DLch> for Color<Srgb> {
     fn from(lch: Color<DLch>) -> Self {
         lch.into::<CieLab<D65>>().into()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::spaces::{DLab, DLch, Srgb};
+    use crate::test_util::round_trips;
+    use crate::{Color, Float};
+
+    fn rgb(r: Float, g: Float, b: Float) -> Color<Srgb> {
+        Color::new(r, g, b)
+    }
+
+    fn dlch(l: Float, a: Float, b: Float) -> Color<DLch> {
+        Color::new(l, a, b)
+    }
+
+    #[test]
+    fn test_dlch() {
+        assert_eq!(
+            rgb(1.0, 1.0, 1.0).into(),
+            dlch(100.00000042980086, 0.0, 0.0)
+        );
+        let x11 = 1.0 / 15.0;
+        assert_eq!(rgb(x11, x11, x11).into(), dlch(5.938147698096487, 0.0, 0.0));
+        assert_eq!(rgb(0.0, 0.0, 0.0).into(), dlch(0.0, 0.0, 0.0));
+        assert_eq!(
+            rgb(1.0, 0.0, 0.0).into(),
+            dlch(57.29278122742003, 49.91494982539091, 37.691027859887654)
+        );
+    }
+
+    #[test]
+    fn test_dlch_roundtrips() {
+        round_trips::<DLab, DLch>();
+        round_trips::<DLch, DLab>();
     }
 }

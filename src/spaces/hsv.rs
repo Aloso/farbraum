@@ -31,3 +31,48 @@ impl From<Srgb> for Color<Hsv> {
         Color::new(h, s, v)
     }
 }
+
+#[cfg(test)]
+mod tests {
+
+    use crate::spaces::{Hsv, Srgb};
+    use crate::test_util::round_trips_srgb;
+    use crate::{Color, Float};
+
+    fn rgb(r: Float, g: Float, b: Float) -> Color<Srgb> {
+        Color::new(r, g, b)
+    }
+
+    fn hsv(l: Float, a: Float, b: Float) -> Color<Hsv> {
+        Color::new(l, a, b)
+    }
+
+    #[test]
+    fn test_hsv_to_rgb() {
+        assert_eq!(hsv(0.0, 0.0, 0.0).into(), rgb(0.0, 0.0, 0.0));
+        assert_eq!(hsv(60.0, 0.25, 0.0).into(), rgb(0.0, 0.0, 0.0));
+        assert_eq!(hsv(0.0, 0.0, 0.5).into(), rgb(0.5, 0.5, 0.5));
+        assert_eq!(hsv(60.0, 0.0, 0.25).into(), rgb(0.25, 0.25, 0.25));
+        assert_eq!(hsv(100.0, 0.0, 0.5).into(), rgb(0.5, 0.5, 0.5));
+    }
+
+    #[test]
+    fn test_rgb_to_hsv() {
+        assert_eq!(hsv(0.0, 0.0, 0.0), rgb(0.0, 0.0, 0.0).into());
+        assert_eq!(hsv(0.0, 0.0, 0.25), rgb(0.25, 0.25, 0.25).into());
+        assert_eq!(hsv(0.0, 0.0, 0.6), rgb(0.6, 0.6, 0.6).into());
+
+        // red, yellow, green, cyan, blue, magenta
+        assert_eq!(hsv(0.0, 1.0, 1.0), rgb(1.0, 0.0, 0.0).into());
+        assert_eq!(hsv(60.0, 1.0, 1.0), rgb(1.0, 1.0, 0.0).into());
+        assert_eq!(hsv(120.0, 1.0, 1.0), rgb(0.0, 1.0, 0.0).into());
+        assert_eq!(hsv(180.0, 1.0, 1.0), rgb(0.0, 1.0, 1.0).into());
+        assert_eq!(hsv(240.0, 1.0, 1.0), rgb(0.0, 0.0, 1.0).into());
+        assert_eq!(hsv(300.0, 1.0, 1.0), rgb(1.0, 0.0, 1.0).into());
+    }
+
+    #[test]
+    fn test_hsv_roundtrips() {
+        round_trips_srgb::<Hsv>();
+    }
+}

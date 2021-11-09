@@ -1,5 +1,5 @@
-use crate::spaces::{CieXyz, LinearSrgb, Srgb};
 use crate::illuminate::D50;
+use crate::spaces::{CieXyz, LinearSrgb, Srgb};
 use crate::{Color, Float, From};
 
 pub(crate) const K: Float = (29.0 * 29.0 * 29.0) / (3.0 * 3.0 * 3.0);
@@ -9,9 +9,9 @@ impl From<LinearSrgb> for Color<CieXyz<D50>> {
     fn from(rgb: Color<LinearSrgb>) -> Self {
         let (r, g, b) = rgb.tuple();
 
-        let x = 0.4360747 * r + 0.3850649 * g + 0.1430804 * b;
-        let y = 0.2225045 * r + 0.7168786 * g + 0.0606169 * b;
-        let z = 0.0139322 * r + 0.0971045 * g + 0.7141733 * b;
+        let x = 0.436074716431 * r + 0.385064915333 * g + 0.143080380986 * b;
+        let y = 0.222504478679 * r + 0.716878600214 * g + 0.060616923407 * b;
+        let z = 0.013932173982 * r + 0.097104523966 * g + 0.714173283533 * b;
 
         Color::new(x, y, z)
     }
@@ -38,5 +38,17 @@ impl From<CieXyz<D50>> for Color<LinearSrgb> {
 impl From<CieXyz<D50>> for Color<Srgb> {
     fn from(xyz: Color<CieXyz<D50>>) -> Self {
         xyz.into::<LinearSrgb>().into()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::illuminate::D50;
+    use crate::spaces::CieXyz;
+    use crate::test_util::round_trips_srgb;
+
+    #[test]
+    fn test_xyz_d50_roundtrips() {
+        round_trips_srgb::<CieXyz<D50>>();
     }
 }

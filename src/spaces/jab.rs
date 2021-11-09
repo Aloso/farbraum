@@ -3,7 +3,7 @@ use crate::spaces::{CieXyz, Jab, Srgb};
 use crate::{Color, Float, From};
 
 const N: Float = 0.1593017578125; // = 2610 / Math.pow(2, 14);
-const P: Float = 134.03437499999998; // = 1.7 * 2523 / Math.pow(2, 5);
+const P: Float = 134.034375; // = 1.7 * 2523 / Math.pow(2, 5);
 const C1: Float = 0.8359375; // = 3424 / Math.pow(2, 12);
 const C2: Float = 18.8515625; // = 2413 / Math.pow(2, 7);
 const C3: Float = 18.6875; // = 2392 / Math.pow(2, 7);
@@ -30,13 +30,13 @@ impl From<Jab> for Color<CieXyz<D65>> {
 
         let i = (j + D0) / (0.44 + 0.56 * (j + D0));
 
-        let l = pq_inv(i + 0.13860504 * a + 0.058047316 * b);
-        let m = pq_inv(i - 0.13860504 * a - 0.058047316 * b);
-        let s = pq_inv(i - 0.096019242 * a - 0.8118919 * b);
+        let l = pq_inv(i + 0.1386050432715393 * a + 0.05804731615611869 * b);
+        let m = pq_inv(i - 0.1386050432715393 * a - 0.05804731615611891 * b);
+        let s = pq_inv(i - 0.09601924202631895 * a - 0.811891896056039 * b);
 
-        let x = rel(1.661373024652174 * l - 0.914523081304348 * m + 0.23136208173913045 * s);
-        let y = rel(-0.3250758611844533 * l + 1.571847026732543 * m - 0.21825383453227928 * s);
-        let z = rel(-0.090982811 * l - 0.31272829 * m + 1.5227666 * s);
+        let x = rel(1.661373055774069 * l - 0.9145230923250668 * m + 0.2313620767186147 * s);
+        let y = rel(-0.3250758740427037 * l + 1.571847038366936 * m - 0.218253831867294 * s);
+        let z = rel(-0.09098281098284756 * l - 0.312728290523074 * m + 1.52276656130526 * s);
 
         Color::new(x, y, z)
     }
@@ -91,5 +91,44 @@ impl From<Srgb> for Color<Jab> {
 impl From<Jab> for Color<Srgb> {
     fn from(jab: Color<Jab>) -> Self {
         jab.into::<CieXyz<D65>>().into()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::illuminate::D65;
+    use crate::spaces::{CieXyz, Jab, Srgb};
+    use crate::test_util::{round_trips, round_trips_srgb};
+    use crate::{Color, Float};
+
+    fn rgb(r: Float, g: Float, b: Float) -> Color<Srgb> {
+        Color::new(r, g, b)
+    }
+
+    fn jab(l: Float, a: Float, b: Float) -> Color<Jab> {
+        Color::new(l, a, b)
+    }
+
+    #[test]
+    fn test_jab_to_rgb() {
+        assert_similar!(
+            jab(0.22206540515, -0.000153429, -0.000094388).into(),
+            rgb(1.0, 1.0, 1.0)
+        );
+        assert_similar!(
+            jab(3.2311742677852644e-27, 0.0, 0.0).into(),
+            rgb(0.0, 0.0, 0.0)
+        );
+        assert_similar!(
+            jab(0.13439374892, 0.11788937861, 0.111882888348).into(),
+            rgb(1.0, 0.0, 0.0)
+        );
+    }
+
+    #[test]
+    fn test_jab_roundtrips() {
+        round_trips_srgb::<Jab>();
+        round_trips::<Jab, CieXyz<D65>>();
+        round_trips::<CieXyz<D65>, Jab>();
     }
 }

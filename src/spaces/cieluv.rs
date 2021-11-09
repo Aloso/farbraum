@@ -1,5 +1,5 @@
 use crate::illuminate::{D50, D50_WHITE};
-use crate::spaces::{CieLuv, CieXyz, Srgb};
+use crate::spaces::{util, CieLuv, CieXyz, Srgb};
 use crate::{Color, Float, From};
 
 use super::xyz_d50::{E, K};
@@ -20,8 +20,8 @@ impl From<CieLuv> for Color<CieXyz<D50>> {
         let un = u_fn(xn, yn, zn);
         let vn = v_fn(xn, yn, zn);
 
-        let up = u / (13.0 * l) + un;
-        let vp = v / (13.0 * l) + vn;
+        let up = util::no_nan(u / (13.0 * l)) + un;
+        let vp = util::no_nan(v / (13.0 * l)) + vn;
 
         let y = yn
             * (if l <= 8.0 {
@@ -80,5 +80,19 @@ impl From<Srgb> for Color<CieLuv> {
 impl From<CieLuv> for Color<Srgb> {
     fn from(luv: Color<CieLuv>) -> Self {
         luv.into::<CieXyz<D50>>().into()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::illuminate::D50;
+    use crate::spaces::{CieLuv, CieXyz};
+    use crate::test_util::{round_trips, round_trips_srgb};
+
+    #[test]
+    fn test_cieluv_roundtrips() {
+        round_trips_srgb::<CieLuv>();
+        round_trips::<CieXyz<D50>, CieLuv>();
+        round_trips::<CieLuv, CieXyz<D50>>();
     }
 }

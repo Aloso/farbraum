@@ -37,3 +37,18 @@ impl From<Srgb> for Color<CieLch<D65>> {
         rgb.into::<CieLab<D65>>().into()
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::illuminate::{D50, D65};
+    use crate::spaces::{CieLab, CieLch};
+    use crate::test_util::{round_trips, round_trips_srgb};
+
+    #[test]
+    fn test_cielch_roundtrips() {
+        round_trips_srgb::<CieLch<D50>>();
+        round_trips_srgb::<CieLch<D65>>();
+        round_trips::<CieLch<D65>, CieLab<D65>>();
+        round_trips::<CieLab<D65>, CieLch<D65>>();
+    }
+}

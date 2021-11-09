@@ -65,3 +65,15 @@ impl From<Srgb> for Color<CieLab<D65>> {
         lab
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::illuminate::D65;
+    use crate::spaces::CieLab;
+    use crate::test_util::round_trips_srgb;
+
+    #[test]
+    fn test_cielab_d65_roundtrips() {
+        round_trips_srgb::<CieLab<D65>>();
+    }
+}
