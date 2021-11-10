@@ -1,3 +1,5 @@
+//! Contains the color spaces.
+
 use core::fmt;
 
 use crate::illuminate::D65;
@@ -7,6 +9,7 @@ mod cielab;
 mod cielch;
 mod cielchuv;
 mod cieluv;
+mod cmy;
 mod cubehelix;
 mod dlab;
 mod dlch;
@@ -33,7 +36,7 @@ mod xyz;
 // YUV:
 //     YCbCr, YCoCg, YPbPr, YDdDr, YIQ, xvYCC, sYCC, YIQ
 // Subtractive color spaces:
-//     CMY, CMYK, CcMmYK, RYB
+//     CMYK, CcMmYK, RYB
 // Other:
 //     IPT, ICtCp, XYB, SRLAB2, OSA-UCS, Coloroid, LMS, Hexachrome, Yxy, HCL, polarLAB
 //
@@ -42,6 +45,9 @@ mod xyz;
 
 mod util;
 
+/// Trait for implementing type-safe conversions between Lab and LCh color spaces.
+///
+/// You don't need to use this trait directly.
 pub trait Lab {
     type Lch;
     type Illuminate;
@@ -98,6 +104,7 @@ pub struct CieLuv;
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct CieLchuv;
 
+/// Cubehelix color space.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct CubeHelix;
 
@@ -150,6 +157,10 @@ pub struct Hsv;
 /// HWB color space.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct Hwb;
+
+/// CMY subtractive color space.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub struct Cmy;
 
 /// Linear sRGB color space.
 ///

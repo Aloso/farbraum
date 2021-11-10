@@ -1,10 +1,12 @@
+//! Contains the D50 and D65 standard illuminants.
+
 use crate::Float;
 
 /// Standard D50 illuminate. Commonly used by CIE color spaces.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct D50;
 
-/// Standard D65 illuminate. Used by sRGB and many other color spaces.
+/// Standard D65 illuminate. Used by most color spaces.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub struct D65;
 

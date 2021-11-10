@@ -15,6 +15,15 @@ stated otherwise.
 RGB colors consist of the components _red_, _green_ and _blue_. Each component
 should be in the range [0, 1].
 
+## CMY (subtractive) color spaces
+
+| Type  | Description          |
+| ----- | -------------------- |
+| `Cmy` | CMY, inverse of sRGB |
+
+CMY consists of the components _cyan_, _magenta_ and _yellow_. Each component
+should be in the range [0, 1].
+
 ## sRGB-derived color spaces
 
 | Type  | Description                |

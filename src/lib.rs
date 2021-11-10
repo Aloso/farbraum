@@ -24,10 +24,11 @@
 //!
 //! ## Color spaces
 //!
-//! Farbraum supports 22 color spaces:
+//! Farbraum supports 23 color spaces:
 //!
 //! * sRGB, Linear sRGB
 //! * Adobe RGB (1998)
+//! * CMY
 //! * sRGB-derived color spaces (HSL, HSV, HSI, HWB)
 //! * CIE XYZ (supports D50 and D65 illumination)
 //! * CIELAB, CIELCh (supports D50 and D65 illumination)
@@ -130,12 +131,16 @@ mod test_util;
 
 mod color;
 
+/// The color component type, `f64` by default.
+///
+/// If you disable the `double-precision` feature, `f32` is used instead.
 pub type Float = float!();
 pub use color::Color;
 
 pub mod illuminate;
 pub mod spaces;
 
+/// Trait for color space conversions.
 pub trait Into<SPACE> {
     fn into(self, space: SPACE) -> Color<SPACE>;
 }

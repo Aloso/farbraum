@@ -2,11 +2,9 @@ use core::fmt;
 
 use crate::{Float, Into};
 
-/// A color in a specific color space, consisting of 3 [`Float`] components.
+/// A color in a specific color space, consisting of 3 [`Float`] components and a color space.
 ///
-/// The color spaces are just phantom types. They ensure that only the correct
-/// conversion functions can be applied to a color. Conversion is handled by
-/// the [`into()`](#methods.into) method.
+/// Conversion is handled by the [`into()`](#method.into) method.
 #[derive(Clone, Copy, Default)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub struct Color<SPACE>(Float, Float, Float, SPACE);
