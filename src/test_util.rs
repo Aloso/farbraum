@@ -3,7 +3,7 @@
 use crate::{spaces::Srgb, Color, Into};
 
 #[macro_export]
-macro_rules! assert_similar {
+macro_rules! assert_almost_eq {
     ($e1:expr, $e2:expr, finally: $finally:expr) => {{
         let _e1 = $e1;
         let _e2 = $e2;
@@ -22,8 +22,8 @@ macro_rules! assert_similar {
             assert_eq!(_e1, _e2);
         }
     }};
-    ($e1:expr, $e2:expr) => {
-        assert_similar!($e1, $e2, finally: ())
+    ($e1:expr, $e2:expr $(,)?) => {
+        assert_almost_eq!($e1, $e2, finally: ())
     };
 }
 
@@ -52,7 +52,7 @@ where
 {
     for color in get_colors() {
         let converted = color.into(T::default()).into(Srgb);
-        assert_similar!(
+        assert_almost_eq!(
             color,
             converted,
             finally: println!("--> color: {:?}", color)
@@ -72,11 +72,11 @@ where
     for color in get_colors() {
         let init = color.into(T::default());
         let converted = init.into(U::default()).into(T::default());
-        assert_similar!(init, converted, finally: {
+        assert_almost_eq!(init, converted, finally: {
             println!("--> color: {:?}", color);
             println!("--> init: {:?}", init);
         });
-        assert_similar!(color, converted.into(Srgb), finally: {
+        assert_almost_eq!(color, converted.into(Srgb), finally: {
             println!("--> color: {:?}", color);
         });
     }

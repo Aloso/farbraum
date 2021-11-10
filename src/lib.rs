@@ -24,11 +24,11 @@
 //!
 //! ## Color spaces
 //!
-//! Farbraum supports 23 color spaces:
+//! Farbraum supports 24 color spaces:
 //!
 //! * sRGB, Linear sRGB
 //! * Adobe RGB (1998)
-//! * CMY
+//! * CMY, CMYK<sup>1</sup>
 //! * sRGB-derived color spaces (HSL, HSV, HSI, HWB)
 //! * CIE XYZ (supports D50 and D65 illumination)
 //! * CIELAB, CIELCh (supports D50 and D65 illumination)
@@ -42,6 +42,10 @@
 //! [D65 standard illuminate](https://en.wikipedia.org/wiki/Illuminant_D65)
 //! unless stated otherwise. CIE XYZ, CIELAB and CIELCh are available
 //! with both D50 and D65 illuminant.
+//!
+//! <sup>1</sup> Since CMYK has 4 components instead of 3, it must be
+//! represented as a tuple instead of a `Color`. Use the `{to,from}_cmyk()`
+//! methods to convert between `Color<CMY>` and `(C, M, Y, K)`.
 //!
 //! ## Dynamic color spaces
 //!

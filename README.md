@@ -13,7 +13,7 @@ Look at [the documentation](https://docs.rs/farbraum).
 
 ## Color spaces
 
-Farbraum supports 22 color spaces, including sRGB, HSL, HSV, Oklab, CIELAB,
+Farbraum supports 24 color spaces, including sRGB, HSL, HSV, Oklab, CIELAB,
 CIELUV, CIE XYZ and more. [See the full list](./Color_spaces.md).
 
 ## Cargo features

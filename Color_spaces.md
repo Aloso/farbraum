@@ -17,9 +17,10 @@ should be in the range [0, 1].
 
 ## CMY (subtractive) color spaces
 
-| Type  | Description          |
-| ----- | -------------------- |
-| `Cmy` | CMY, inverse of sRGB |
+| Type   | Description                                                                                                                    |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| `Cmy`  | CMY, inverse of sRGB                                                                                                           |
+| `Cmyk` | CMYK, the color space used by color printers<br>Represented as a tuple instead of a `Color` struct because it has 4 components |
 
 CMY consists of the components _cyan_, _magenta_ and _yellow_. Each component
 should be in the range [0, 1].

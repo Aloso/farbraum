@@ -111,15 +111,15 @@ mod tests {
 
     #[test]
     fn test_jab_to_rgb() {
-        assert_similar!(
+        assert_almost_eq!(
             jab(0.22206540515, -0.000153429, -0.000094388).into(Srgb),
             rgb(1.0, 1.0, 1.0)
         );
-        assert_similar!(
+        assert_almost_eq!(
             jab(3.2311742677852644e-27, 0.0, 0.0).into(Srgb),
             rgb(0.0, 0.0, 0.0)
         );
-        assert_similar!(
+        assert_almost_eq!(
             jab(0.13439374892, 0.11788937861, 0.111882888348).into(Srgb),
             rgb(1.0, 0.0, 0.0)
         );
