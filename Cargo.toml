@@ -10,5 +10,5 @@ license = "MIT OR Apache-2.0"
 serde = { version = "1", features = ["derive"], optional = true }
 
 [features]
-default = ["double_precision"]
-double_precision = []
+default = ["double-precision"]
+double-precision = []

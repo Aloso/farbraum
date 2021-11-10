@@ -57,7 +57,7 @@ pub struct Srgb;
 
 /// CIE Lab color space.
 #[derive(Clone, Copy, PartialEq, Eq, Default)]
-pub struct CieLab<I>(I);
+pub struct CieLab<I>(pub I);
 
 impl<I: fmt::Debug> fmt::Debug for CieLab<I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -67,7 +67,7 @@ impl<I: fmt::Debug> fmt::Debug for CieLab<I> {
 
 /// CIE LCh color space.
 #[derive(Clone, Copy, PartialEq, Eq, Default)]
-pub struct CieLch<I>(I);
+pub struct CieLch<I>(pub I);
 
 impl<I: fmt::Debug> fmt::Debug for CieLch<I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -82,7 +82,7 @@ impl<I> Lab for CieLab<I> {
 
 /// CIE XYZ color space.
 #[derive(Clone, Copy, PartialEq, Eq, Default)]
-pub struct CieXyz<I>(I);
+pub struct CieXyz<I>(pub I);
 
 impl<I: fmt::Debug> fmt::Debug for CieXyz<I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
