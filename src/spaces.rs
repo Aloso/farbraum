@@ -3,8 +3,7 @@ use core::fmt;
 use crate::illuminate::D65;
 
 mod adobe98;
-mod cielab_d50;
-mod cielab_d65;
+mod cielab;
 mod cielch;
 mod cielchuv;
 mod cieluv;
@@ -21,8 +20,7 @@ mod lab;
 mod lrgb;
 mod oklab;
 mod oklch;
-mod xyz_d50;
-mod xyz_d65;
+mod xyz;
 
 // Missing color spaces from culori:
 //     OkHsl, OkHsv, DCI-P3, ProPhoto, Rec.2020

@@ -2,7 +2,7 @@ use crate::illuminate::{D50, D50_WHITE};
 use crate::spaces::{util, CieLuv, CieXyz, Srgb};
 use crate::{Color, Float, Into};
 
-use super::xyz_d50::{E, K};
+use super::xyz::{E, K};
 
 fn u_fn(x: Float, y: Float, z: Float) -> Float {
     (4.0 * x) / (x + 15.0 * y + 3.0 * z)
