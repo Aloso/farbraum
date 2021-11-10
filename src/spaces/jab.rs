@@ -7,7 +7,7 @@ const P: Float = 134.034375; // = 1.7 * 2523 / Math.pow(2, 5);
 const C1: Float = 0.8359375; // = 3424 / Math.pow(2, 12);
 const C2: Float = 18.8515625; // = 2413 / Math.pow(2, 7);
 const C3: Float = 18.6875; // = 2392 / Math.pow(2, 7);
-const D0: Float = 1.6295499532821566e-11;
+const D0: Float = 1.6295499532821565e-11;
 
 // `v` may be negative, in which case return 0 instead of NaN
 fn pq_inv(v: Float) -> Float {
@@ -28,11 +28,11 @@ impl Into<CieXyz<D65>> for Color<Jab> {
     fn into(self, _: CieXyz<D65>) -> Color<CieXyz<D65>> {
         let (j, a, b) = self.tuple();
 
-        let i = (j + D0) / (0.44 + 0.56 * (j + D0));
+        let ii = (j + D0) / (0.44 + 0.56 * (j + D0));
 
-        let l = pq_inv(i + 0.1386050432715393 * a + 0.05804731615611869 * b);
-        let m = pq_inv(i - 0.1386050432715393 * a - 0.05804731615611891 * b);
-        let s = pq_inv(i - 0.09601924202631895 * a - 0.811891896056039 * b);
+        let l = pq_inv(ii + 0.1386050432715393 * a + 0.05804731615611869 * b);
+        let m = pq_inv(ii - 0.1386050432715393 * a - 0.05804731615611891 * b);
+        let s = pq_inv(ii - 0.09601924202631895 * a - 0.811891896056039 * b);
 
         let x = rel(1.661373055774069 * l - 0.9145230923250668 * m + 0.2313620767186147 * s);
         let y = rel(-0.3250758740427037 * l + 1.571847038366936 * m - 0.218253831867294 * s);
@@ -72,9 +72,9 @@ impl Into<Jab> for Color<CieXyz<D65>> {
         let m = pq(-0.20151 * xp + 1.120649 * yp + 0.0531008 * z);
         let s = pq(-0.0166008 * xp + 0.2648 * yp + 0.6684799 * z);
 
-        let i = (l + m) / 2.0;
+        let ii = (l + m) / 2.0;
 
-        let j = (0.44 * i) / (1.0 - 0.56 * i) - D0;
+        let j = (0.44 * ii) / (1.0 - 0.56 * ii) - D0;
         let a = 3.524 * l - 4.066708 * m + 0.542708 * s;
         let b = 0.199076 * l + 1.096799 * m - 1.295875 * s;
 

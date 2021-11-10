@@ -33,12 +33,12 @@ impl Into<CieLab<D65>> for Color<DLch> {
 
         let l2 = (E.powf((l * KE) / factor()) - 1.0) / 0.0039;
 
-        let g = (E.powf(0.0435 * c * KCH * KE) - 1.0) / 0.075;
-        let e = g * (util::deg_to_rad(h) - DELTA).cos();
-        let f = g * (util::deg_to_rad(h) - DELTA).sin();
+        let gg = (E.powf(0.0435 * c * KCH * KE) - 1.0) / 0.075;
+        let ee = gg * (util::deg_to_rad(h) - DELTA).cos();
+        let ff = gg * (util::deg_to_rad(h) - DELTA).sin();
 
-        let a = e * cos_delta - (f / 0.83) * sin_delta;
-        let b = e * sin_delta + (f / 0.83) * cos_delta;
+        let a = ee * cos_delta - (ff / 0.83) * sin_delta;
+        let b = ee * sin_delta + (ff / 0.83) * cos_delta;
 
         Color::of(l2, a, b)
     }

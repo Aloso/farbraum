@@ -1,3 +1,5 @@
+#![allow(clippy::float_cmp)]
+
 #[cfg(feature = "double_precision")]
 macro_rules! float {
     () => {
