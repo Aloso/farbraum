@@ -9,14 +9,14 @@ const KCH: Float = 1.0;
 const DELTA: Float = (26.0 / 180.0) * PI;
 
 impl Into<DLch> for Color<DLab> {
-    fn into(self, _: DLch) -> Color<DLch> {
-        lab::lab_to_lch(self)
+    fn into(self, s: DLch) -> Color<DLch> {
+        lab::lab_to_lch(self, s)
     }
 }
 
 impl Into<DLab> for Color<DLch> {
-    fn into(self, _: DLab) -> Color<DLab> {
-        lab::lch_to_lab(self)
+    fn into(self, s: DLab) -> Color<DLab> {
+        lab::lch_to_lab(self, s)
     }
 }
 

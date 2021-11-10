@@ -59,9 +59,9 @@ pub struct Srgb;
 #[derive(Clone, Copy, PartialEq, Eq, Default)]
 pub struct CieLab<I>(I);
 
-impl<I: fmt::Debug + Default> fmt::Debug for CieLab<I> {
+impl<I: fmt::Debug> fmt::Debug for CieLab<I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CieLab<{:?}>", I::default())
+        write!(f, "CieLab<{:?}>", self.0)
     }
 }
 
@@ -69,9 +69,9 @@ impl<I: fmt::Debug + Default> fmt::Debug for CieLab<I> {
 #[derive(Clone, Copy, PartialEq, Eq, Default)]
 pub struct CieLch<I>(I);
 
-impl<I: fmt::Debug + Default> fmt::Debug for CieLch<I> {
+impl<I: fmt::Debug> fmt::Debug for CieLch<I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CieLch<{:?}>", I::default())
+        write!(f, "CieLch<{:?}>", self.0)
     }
 }
 
@@ -84,9 +84,9 @@ impl<I> Lab for CieLab<I> {
 #[derive(Clone, Copy, PartialEq, Eq, Default)]
 pub struct CieXyz<I>(I);
 
-impl<I: fmt::Debug + Default> fmt::Debug for CieXyz<I> {
+impl<I: fmt::Debug> fmt::Debug for CieXyz<I> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "CieXyz<{:?}>", I::default())
+        write!(f, "CieXyz<{:?}>", self.0)
     }
 }
 

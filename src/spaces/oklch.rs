@@ -2,14 +2,14 @@ use crate::spaces::{lab, LinearSrgb, OkLab, OkLch, Srgb};
 use crate::{Color, Into};
 
 impl Into<OkLab> for Color<OkLch> {
-    fn into(self, _: OkLab) -> Color<OkLab> {
-        lab::lch_to_lab(self)
+    fn into(self, s: OkLab) -> Color<OkLab> {
+        lab::lch_to_lab(self, s)
     }
 }
 
 impl Into<OkLch> for Color<OkLab> {
-    fn into(self, _: OkLch) -> Color<OkLch> {
-        lab::lab_to_lch(self)
+    fn into(self, s: OkLch) -> Color<OkLch> {
+        lab::lab_to_lch(self, s)
     }
 }
 
